@@ -1,6 +1,7 @@
 package com.operations.winsky.recyclecetlect;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -8,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -203,15 +205,41 @@ public class MainActivity2 extends Activity implements View.OnClickListener, Min
             mBtnEditor.setText("取消");
             mLlMycollectionBottomDialog.setVisibility(View.VISIBLE);
             editorStatus = true;
+            setMargin(mRecyclerview, 0, 0, -25, 0);//4个参数按顺序分别是左上右下
         } else {
             mBtnEditor.setText("编辑");
             mLlMycollectionBottomDialog.setVisibility(View.GONE);
             editorStatus = false;
             clearAll();
+            setMargin(mRecyclerview, dip2px(this, 12), 0, dip2px(this, 12), 0);//4个参数按顺序分别是左上右下
+
         }
         mRadioAdapter.setEditMode(mEditMode);
     }
 
+    /**
+     * 动态修改布局左右间隔
+     * @param v
+     * @param l
+     * @param t
+     * @param r
+     * @param b
+     */
+    public static void setMargin(View v, int l, int t, int r, int b) {
+        if (v.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            p.setMargins(l, t, r, b);
+            v.requestLayout();
+        }
+    }
+
+    /**
+     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
+     */
+    public static int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
 
     private void clearAll() {
         mTvSelectNum.setText(String.valueOf(0));
